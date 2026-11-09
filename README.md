@@ -21,7 +21,7 @@ Required modifications:
 - MCP2515.cpp: extend CNF_MAPPER with your desired CAN speeds
 
 ### 02_canSniffer_GUI
-Python 3 is required for this project, 3.8 is preferred. The GUI is based on pyQt. This project contains my decoded packets in save/decodedPackets.csv. The required python packages can be installed with:
+Python 3.13 or newer is required for the GUI. The GUI is based on PyQt6. This project contains my decoded packets in save/decodedPackets.csv. The required python packages can be installed with:
 ```sh
 $ pip install -r requirements.txt
 ```
