@@ -3,27 +3,27 @@
 #----------------------------------------------------------------
 import serial
 import canSniffer_ui
-from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidgetItem, QHeaderView, QFileDialog, QRadioButton
-from PyQt5.QtWidgets import QVBoxLayout, QSizeGrip
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor
+from PyQt6.QtWidgets import (
+    QApplication,
+    QFileDialog,
+    QHeaderView,
+    QMainWindow,
+    QRadioButton,
+    QTableWidgetItem,
+)
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QColor
 import serial.tools.list_ports
 
 import sys
 import os
 import time
-import qtmodern
-from qtmodern import styles
-from qtmodern import windows
 import csv
 
 import HideOldPackets
 import SerialReader
 import SerialWriter
 import FileLoader
-
-QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
-QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 
 class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
     def __init__(self):
@@ -95,8 +95,12 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
         for i in range(5, self.mainMessageTableWidget.columnCount()):
             self.decodedMessagesTableWidget.setColumnWidth(i, 32)
         self.decodedMessagesTableWidget.setColumnWidth(1, 150)
-        self.decodedMessagesTableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
-        self.txTable.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
+        self.decodedMessagesTableWidget.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeMode.Stretch
+        )
+        self.txTable.horizontalHeader().setSectionResizeMode(
+            3, QHeaderView.ResizeMode.Stretch
+        )
         self.showFullScreen()
 
     def stopPlayBackCallback(self):
@@ -359,7 +363,9 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
             if (isFamiliar or (newId.find("(") >= 0)) and i < 3:
                 self.mainMessageTableWidget.item(row, i).setBackground(QColor(53, 81, 52))
 
-            self.mainMessageTableWidget.item(row, i).setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+            self.mainMessageTableWidget.item(row, i).setTextAlignment(
+                Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignHCenter
+            )
 
         self.receivedPackets = self.receivedPackets + 1
         self.packageCounterLabel.setText(str(self.receivedPackets))
@@ -383,7 +389,10 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
                             if len(rowData[i]):
                                 item = QTableWidgetItem(str(rowData[i]))
                                 if not (table == self.decodedMessagesTableWidget and i == 0):
-                                    item.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+                                    item.setTextAlignment(
+                                        Qt.AlignmentFlag.AlignVCenter
+                                        | Qt.AlignmentFlag.AlignHCenter
+                                    )
                                 table.setItem(row, i, item)
             except OSError:
                 print("file not found: " + path)
@@ -406,7 +415,9 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
         newRow = self.idLabelDictTable.rowCount()
         self.idLabelDictTable.insertRow(newRow)
         widgetItem = QTableWidgetItem()
-        widgetItem.setTextAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+        widgetItem.setTextAlignment(
+            Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignHCenter
+        )
         widgetItem.setText(self.saveIdToDictLineEdit.text())
         self.idLabelDictTable.setItem(newRow, 0, QTableWidgetItem(widgetItem))
         widgetItem.setText(self.saveLabelToDictLineEdit.text())
@@ -510,20 +521,8 @@ def main():
     app = QApplication(sys.argv)
     gui = canSnifferGUI()
 
-    #applying dark theme
-    qtmodern.styles.dark(app)
-    darked_gui = qtmodern.windows.ModernWindow(gui)
-
-    # adding a grip to the top left corner to make the frameless window resizable
-    layout = QVBoxLayout()
-    sizegrip = QSizeGrip(darked_gui)
-    sizegrip.setMaximumSize(30, 30)
-    layout.addWidget(sizegrip, 50, Qt.AlignBottom | Qt.AlignRight)
-    darked_gui.setLayout(layout)
-
-    #starting the app
-    darked_gui.show()
-    app.exec_()
+    gui.show()
+    app.exec()
 
 
 if __name__ == "__main__":

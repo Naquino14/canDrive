@@ -1,4 +1,2 @@
 PySerial
-PyQt5
-PyQt5-tools
-qtmodern
+PyQt6
