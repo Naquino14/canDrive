@@ -101,7 +101,7 @@ class canSnifferGUI(QMainWindow, canSniffer_ui.Ui_MainWindow):
         self.txTable.horizontalHeader().setSectionResizeMode(
             3, QHeaderView.ResizeMode.Stretch
         )
-        self.showFullScreen()
+        self.showMaximized()
 
     def stopPlayBackCallback(self):
         try:
